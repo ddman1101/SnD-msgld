@@ -182,4 +182,3 @@ Output transcripts are saved as `.txt`, one onset per line:
 ```
 <timestamp_seconds>    <drum_type>
 ```
-
