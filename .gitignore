@@ -26,23 +26,13 @@ miniconda3/
 *.zip
 *.gz
 
-# ==== Audio / Data blobs ====
-*.npz
-*.npy
-*.wav
-*.mp3
-*.flac
-*.m4a
-
 # ==== Project outputs ====
 lightning_logs/
-transcription_results/
 onset_evaluation_result*/
 onset_visualization_val/
 MSG-LD/outputs/
 
 # ==== Local datasets / artifacts (keep repo lightweight) ====
-data/
 old_data/
 drum_transcription_results/
 onset_evaluation_result_new_obtb/
