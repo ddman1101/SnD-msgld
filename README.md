@@ -145,7 +145,7 @@ Common configs under `config/MSG-LD/` and when to use them:
 Example (training with onset+timbre):
 ```bash
 CUDA_VISIBLE_DEVICES=0 \
-python train_musicldm.py --config config/MSG-LD/integrated_musicldm_onset_timbre.yaml
+python integrated_train.py --config config/MSG-LD/integrated_musicldm_onset_timbre.yaml
 ```
 
 # Inference
@@ -158,15 +158,23 @@ conda activate musicldm_env
 
 # MDB-Drums inference/eval (config controls dataset split/paths/checkpoints)
 CUDA_VISIBLE_DEVICES=0 \
-python train_musicldm.py --config config/MSG-LD/inference_musicldm_mdb_inference.yaml
+python integrated_train.py --config config/MSG-LD/inference_musicldm_mdb_inference.yaml --separate_only
 
 # ENST-Drums inference/eval
 CUDA_VISIBLE_DEVICES=0 \
-python train_musicldm.py --config config/MSG-LD/inference_musicldm_enst_inference.yaml
+python integrated_train.py --config config/MSG-LD/inference_musicldm_enst_inference.yaml --separate_only
+
+# Single audio file separation (test inference) --> What ever music you like
+CUDA_VISIBLE_DEVICES=0 \
+python integrated_train.py --config config/MSG-LD/integrated_musicldm_test_inference.yaml --separate_only
 ```
 Tips:
 - Set `CUDA_VISIBLE_DEVICES` to select a GPU (optional).
 - Verify paths inside the inference yaml(s): checkpoints, dataset roots, and output directories.
+- For single audio separation, modify these paths in the config:
+  - `data.params.path.valid_data`: Where to read separated stems from
+  - `mdb_eval.demucs_input_root`: Input audio file(s) directory
+  - `mdb_eval.demucs_output_root`: Demucs separation output directory
 
 2) Single-audio onset transcription (onset_detect)
 ```bash

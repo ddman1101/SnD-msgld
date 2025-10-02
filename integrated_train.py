@@ -835,14 +835,19 @@ def main():
     )
     if args.separate_only:
         # Separation-only: do not run evaluation
-        # 1) If YAML has mdb_eval and run_demucs=true, run demucs two-stem separation on inputs
-        mdb_cfg = config.get('mdb_eval', {}) or {}
-        if mdb_cfg.get('run_demucs', False) and mdb_cfg.get('demucs_input_root') and mdb_cfg.get('demucs_output_root'):
-            # print(f"[SeparateOnly] running demucs: {mdb_cfg['demucs_input_root']}")
-            try:
-                Path(mdb_cfg['demucs_output_root']).mkdir(parents=True, exist_ok=True)
-                # print("len : ", len(os.listdir(mdb_cfg['demucs_output_root'])))
-                if len(os.listdir(mdb_cfg['demucs_output_root'])) == 0:
+        # 1) Check if valid_data path exists, if not, run demucs first
+        data = instantiate_from_config(config["data"])
+        valid_data_path = data.path.get('valid_data')
+        
+        if valid_data_path and not os.path.exists(valid_data_path):
+            print(f"[SeparateOnly] valid_data path not found: {valid_data_path}")
+            print("[SeparateOnly] Running Demucs separation first...")
+            
+            mdb_cfg = config.get('mdb_eval', {}) or {}
+            if mdb_cfg.get('run_demucs', False) and mdb_cfg.get('demucs_input_root') and mdb_cfg.get('demucs_output_root'):
+                try:
+                    Path(mdb_cfg['demucs_output_root']).mkdir(parents=True, exist_ok=True)
+                    
                     # Prepare input file list (supports directory or single file)
                     demucs_in = str(mdb_cfg['demucs_input_root'])
                     inputs = []
@@ -855,6 +860,7 @@ def main():
                         inputs.sort()
                     else:
                         inputs = [demucs_in]
+                    
                     if not inputs:
                         print(f"[SeparateOnly] demucs inputs empty under: {demucs_in}")
                     else:
@@ -868,13 +874,20 @@ def main():
                             cmd += ['--device', str(mdb_cfg['demucs_device'])]
                         cmd += inputs
                         print(f"[SeparateOnly] running demucs: {' '.join(cmd[:8])} ... (+{len(inputs)} files)")
-                        subprocess.run(cmd, check=False)
-            except Exception as e:
-                print(f"[SeparateOnly] demucs failed: {e}")
+                        result = subprocess.run(cmd, check=False)
+                        if result.returncode == 0:
+                            print("[SeparateOnly] Demucs separation completed successfully")
+                        else:
+                            print(f"[SeparateOnly] Demucs failed with return code: {result.returncode}")
+                except Exception as e:
+                    print(f"[SeparateOnly] demucs failed: {e}")
+            else:
+                print("[SeparateOnly] Demucs configuration not found or incomplete")
+        else:
+            print(f"[SeparateOnly] valid_data path exists: {valid_data_path}")
 
         # 2) Run validate once with current checkpoint, but only collect samples output during validation_step (target_*/val_* in log_dir)
         #    You can control data source via DataModule path options (e.g., set valid_data to demucs_output_root)
-        data = instantiate_from_config(config["data"])
         data.prepare_data()
         data.setup()
         print("[SeparateOnly] start model separation (no eval)...")
