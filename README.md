@@ -2,6 +2,8 @@
 
 This is the official repository for: [Separate-and-Detect: Unified Drum Transcription and Stem Generation via Latent Diffusion](https://github.com/ddman1101/dssdtm.github.io).
 
+# Abstract
+
 Traditional automatic drum transcription (ADT) directly performs transcription from full-mixture music. This challenging %end-to-end 
 task requires models to understand both the presence of drums and distinguish between different drum pieces. This study leverages advances in music source separation to propose a separation-then-transcription pipeline: a 5-stem multi-track drum separator using latent diffusion generates individual drum stems, after which per-stem onset detection yields class-wise pianorolls. The latent diffusion separator denoises in the compact VAE latent and renders audio with a vocoder. Additional onset/timbre auxiliaries guide the separator during training to encourage percussive-aware representations.
 
