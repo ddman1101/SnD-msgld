@@ -40,3 +40,6 @@ onset_evaluation_result_new_obtb/
 # ==== Misc ====
 __results__/
 *.ipynb_checkpoints/
+
+# ==== Other ====
+.mailmap
