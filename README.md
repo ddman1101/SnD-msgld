@@ -192,3 +192,7 @@ Output transcripts are saved as `.txt`, one onset per line:
 ```
 <timestamp_seconds>    <drum_type>
 ```
+
+# Checkpoint of msgld(+obtb)
+
+https://drive.google.com/drive/folders/1KdArh8U09fOWp-xhFRr9Itzx1LkIYfHA?usp=drive_link
