@@ -113,7 +113,7 @@ wget https://zenodo.org/record/10643148/files/vae-ckpt.ckpt
 After placing these files in your preferred directory and updating their paths in the corresponding config, run the following to train MSG-LD:
 
 ```
-python train_musicldm.py --config config/MSG-LD/integrated_musicldm.yaml
+python inference_train.py --config config/MSG-LD/integrated_musicldm.yaml
 ```
 
 # Config YAML
